@@ -57,6 +57,12 @@ A ready-to-use template is at [docs/skill-template.md](./docs/skill-template.md)
 
 ---
 
+## Available Skills
+
+- [frontend-design](./skills/frontend-design/SKILL.md) - Detailed, model-agnostic guidance for creating bold, production-ready frontend interfaces.
+
+---
+
 ## Contributing
 
 Contributions are welcome! Whether you're fixing a typo, improving an existing skill, or adding a brand new one — please read [CONTRIBUTING.md](./CONTRIBUTING.md) first.

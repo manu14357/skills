@@ -1,6 +1,14 @@
-# Skills placeholder
+# Skills Directory
 
-This directory will contain individual skill folders.
+This folder contains reusable, model-agnostic skills.
+
+## Available Skills
+
+| Skill | Description |
+|---|---|
+| [frontend-design](./frontend-design/SKILL.md) | Create distinctive, production-ready frontend interfaces with strong visual direction, accessibility, and responsiveness. |
+
+## Add a New Skill
 
 Each skill lives in its own subfolder:
 
