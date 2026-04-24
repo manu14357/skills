@@ -59,7 +59,31 @@ A ready-to-use template is at [docs/skill-template.md](./docs/skill-template.md)
 
 ## Available Skills
 
-- [frontend-design](./skills/frontend-design/SKILL.md) - Detailed, model-agnostic guidance for creating bold, production-ready frontend interfaces.
+### Azure Skills
+
+- [appinsights-instrumentation](./skills/appinsights-instrumentation/SKILL.md)
+- [azure-aigateway](./skills/azure-aigateway/SKILL.md)
+- [azure-cloud-migrate](./skills/azure-cloud-migrate/SKILL.md)
+- [azure-compliance](./skills/azure-compliance/SKILL.md)
+- [azure-compute](./skills/azure-compute/SKILL.md)
+- [azure-deploy](./skills/azure-deploy/SKILL.md)
+- [azure-diagnostics](./skills/azure-diagnostics/SKILL.md)
+- [azure-hosted-copilot-sdk](./skills/azure-hosted-copilot-sdk/SKILL.md)
+- [azure-kusto](./skills/azure-kusto/SKILL.md)
+- [azure-messaging](./skills/azure-messaging/SKILL.md)
+- [azure-prepare](./skills/azure-prepare/SKILL.md)
+- [azure-quotas](./skills/azure-quotas/SKILL.md)
+- [azure-rbac](./skills/azure-rbac/SKILL.md)
+- [azure-resource-lookup](./skills/azure-resource-lookup/SKILL.md)
+- [azure-resource-visualizer](./skills/azure-resource-visualizer/SKILL.md)
+- [azure-storage](./skills/azure-storage/SKILL.md)
+- [azure-validate](./skills/azure-validate/SKILL.md)
+- [entra-app-registration](./skills/entra-app-registration/SKILL.md)
+
+### Other Skills
+
+- [frontend-design](./skills/frontend-design/SKILL.md)
+- [shadcn](./skills/shadcn/SKILL.md)
 
 ---
 
