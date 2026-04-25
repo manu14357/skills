@@ -80,6 +80,19 @@ A ready-to-use template is at [docs/skill-template.md](./docs/skill-template.md)
 - [azure-validate](./skills/azure-validate/SKILL.md)
 - [entra-app-registration](./skills/entra-app-registration/SKILL.md)
 
+### Minimalist Entrepreneur Skills
+
+- [company-values](./skills/company-values/SKILL.md)
+- [find-community](./skills/find-community/SKILL.md)
+- [first-customers](./skills/first-customers/SKILL.md)
+- [grow-sustainably](./skills/grow-sustainably/SKILL.md)
+- [marketing-plan](./skills/marketing-plan/SKILL.md)
+- [minimalist-review](./skills/minimalist-review/SKILL.md)
+- [mvp](./skills/mvp/SKILL.md)
+- [pricing](./skills/pricing/SKILL.md)
+- [processize](./skills/processize/SKILL.md)
+- [validate-idea](./skills/validate-idea/SKILL.md)
+
 ### Other Skills
 
 - [frontend-design](./skills/frontend-design/SKILL.md)
