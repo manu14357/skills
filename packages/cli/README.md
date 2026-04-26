@@ -60,22 +60,27 @@ Package name: `zskills`
 # Install globally
 npm i -g zskills
 
-# Add all skills from the registry (defaults to manu14357/zskills)
+# Add all skills from the registry into ./skills/
 zskills add manu14357/zskills
 
-# Add a single skill for a specific agent
+# Add a single skill into ./skills/<skill-name>/
 zskills add manu14357/zskills --skill frontend-design
+
+# Add a single skill into a custom folder
+zskills add manu14357/zskills --skill frontend-design --path ./my-skills
+
+# Install for specific agents instead of local ./skills/
 zskills add manu14357/zskills --skill frontend-design -a claude-code
 zskills add manu14357/zskills --skill frontend-design -a claude-code -a cursor
 
-# Install globally (not just the current project)
-zskills add manu14357/zskills --global
+# Install to a global agent path
+zskills add manu14357/zskills --skill frontend-design -a claude-code --global
 ```
 
 ### All commands
 
 ```bash
-zskills add <repo>            # Install skills from a registry repo
+zskills add <repo>            # Install skills (default target: ./skills)
 zskills list                  # List all available skills in the default registry
 zskills list --installed      # List locally installed skills
 zskills find <query>          # Search skills by name or description
@@ -86,7 +91,7 @@ zskills remove --all          # Remove all installed skills
 zskills init <name>           # Scaffold a new SKILL.md locally
 ```
 
-The CLI installs skills into agent-specific directories in your project or globally. The default registry is `manu14357/zskills`.
+By default, the CLI installs into `./skills/<skill-name>/` in your current directory. Use `--path <dir>` to choose another local destination. Use `-a/--agent` to install into agent-specific project paths and add `--global` for global agent locations. The default registry is `manu14357/zskills`.
 
 ## SKILL.md Standard
 

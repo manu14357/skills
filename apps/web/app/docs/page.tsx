@@ -47,20 +47,23 @@ author: optional-handle
         <div className="space-y-2">
           <p className="text-sm font-medium text-text-primary">Add skills</p>
           <pre className="overflow-x-auto rounded-md border border-border bg-surface p-5 text-xs leading-relaxed text-text-primary">
-{`# Install all skills from the registry
+{`# Install all skills from the registry into ./skills/
 zskills add manu14357/zskills
 
-# Install a single skill
+# Install a single skill into ./skills/<skill-name>/
 zskills add manu14357/zskills --skill frontend-design
 
-# Install for a specific agent (defaults to claude-code)
+# Install a single skill into a custom folder
+zskills add manu14357/zskills --skill frontend-design --path ./my-skills
+
+# Install for a specific agent instead of local ./skills/
 zskills add manu14357/zskills --skill frontend-design -a cursor
 
 # Install multiple agents at once
 zskills add manu14357/zskills --skill frontend-design -a claude-code -a cursor
 
-# Install globally (not just this project)
-zskills add manu14357/zskills --global`}
+# Install to a global agent path
+zskills add manu14357/zskills --skill frontend-design -a claude-code --global`}
           </pre>
         </div>
 
