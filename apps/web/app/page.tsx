@@ -53,7 +53,7 @@ export default async function HomePage() {
               Browse Skills
             </Link>
             <a
-              href="https://github.com/manu14357/askills/fork"
+              href="https://github.com/manu14357/zskills/fork"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md border border-border px-5 py-2.5 text-sm text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"
@@ -86,10 +86,10 @@ export default async function HomePage() {
           <div>
             <p className="text-xs uppercase tracking-widest text-text-muted">Quick install</p>
             <code className="mt-1.5 block font-mono text-sm text-text-primary">
-              npx askills add manu14357/askills
+              npx zskills add manu14357/zskills
             </code>
           </div>
-          <CopyButton value="npx askills add manu14357/askills" />
+          <CopyButton value="npx zskills add manu14357/zskills" />
         </div>
       </section>
 

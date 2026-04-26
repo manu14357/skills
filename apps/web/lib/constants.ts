@@ -2,7 +2,7 @@ const ENV_OWNER = process.env.GITHUB_REPO_OWNER?.trim();
 const ENV_REPO = process.env.GITHUB_REPO_NAME?.trim();
 
 export const REPO_OWNER = ENV_OWNER && ENV_OWNER !== "your-org" ? ENV_OWNER : "manu14357";
-export const REPO_NAME = ENV_REPO && ENV_REPO !== "askills" ? ENV_REPO : "askills";
+export const REPO_NAME = ENV_REPO && ENV_REPO !== "zskills" ? ENV_REPO : "zskills";
 export const REPO_SLUG = `${REPO_OWNER}/${REPO_NAME}`;
 
 export const RAW_BASE_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main`;

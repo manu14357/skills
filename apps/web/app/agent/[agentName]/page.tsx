@@ -21,7 +21,7 @@ export default async function AgentPage({ params }: { params: Promise<{ agentNam
     <div className="space-y-6">
       <header className="space-y-3 rounded-md border border-border bg-surface p-5">
         <h1 className="font-mono text-2xl font-semibold text-text-primary">{agent.label}</h1>
-        <p className="text-sm text-text-muted">Browse ASkills compatible with {agent.label}.</p>
+        <p className="text-sm text-text-muted">Browse ZSkills compatible with {agent.label}.</p>
         <a href={agent.docsUrl} target="_blank" rel="noreferrer" className="inline-flex text-sm text-primary">
           Official docs
         </a>
@@ -30,7 +30,7 @@ export default async function AgentPage({ params }: { params: Promise<{ agentNam
           <p>Global path: {agent.globalPath}</p>
         </div>
         <pre className="rounded-md border border-border bg-black/40 p-3 text-xs text-zinc-300">
-          {`npx askills add your-org/askills -a ${agent.slug}`}
+          {`npx zskills add your-org/zskills -a ${agent.slug}`}
         </pre>
       </header>
 

@@ -13,7 +13,7 @@ export function SiteHeader() {
         {/* Logo */}
         <Link href="/" className="group flex items-baseline gap-2.5">
           <span className="font-mono text-sm font-bold uppercase tracking-[0.2em] text-text-primary">
-            askills
+            zskills
           </span>
           <span className="hidden text-[10px] uppercase tracking-[0.15em] text-primary sm:inline">
             registry
@@ -29,7 +29,7 @@ export function SiteHeader() {
             Browse
           </Link>
           <a
-            href="https://github.com/manu14357/askills/fork"
+            href="https://github.com/manu14357/zskills/fork"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
@@ -99,7 +99,7 @@ export function SiteHeader() {
               Leaderboard
             </Link>
             <a
-              href="https://github.com/manu14357/askills/fork"
+              href="https://github.com/manu14357/zskills/fork"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}

@@ -1,6 +1,6 @@
-# ASkills Web
+# ZSkills Web
 
-Next.js 15 application for ASkills.
+Next.js 15 application for ZSkills.
 
 ## Run locally
 
@@ -11,7 +11,7 @@ Next.js 15 application for ASkills.
 
 3. Start the web app:
 
-   npm run dev -w @askills/web
+   npm run dev -w @zskills/web
 
 ## Routes
 

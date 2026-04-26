@@ -36,7 +36,7 @@ export default async function SkillDetailPage({
     .filter((entry) => (skill.category ? entry.category === skill.category : true))
     .slice(0, 6);
 
-  const installCommand = `npx askills add manu14357/askills --skill ${skill.slug}`;
+  const installCommand = `npx zskills add manu14357/zskills --skill ${skill.slug}`;
   const rawUrl = `${RAW_BASE_URL}/skills/${skill.slug}/SKILL.md`;
 
   return (
@@ -82,7 +82,7 @@ export default async function SkillDetailPage({
         <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={installCommand} />
           <a
-            href={`https://github.com/manu14357/askills/fork`}
+            href={`https://github.com/manu14357/zskills/fork`}
             target="_blank"
             rel="noreferrer"
             className="rounded-md border border-border px-3 py-1.5 text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"

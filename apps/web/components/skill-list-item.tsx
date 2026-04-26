@@ -16,7 +16,7 @@ function relativeTime(iso: string): string {
 
 
 export function SkillListItem({ skill }: SkillListItemProps) {
-  const installCommand = `npx askills add manu14357/askills --skill ${skill.slug}`;
+  const installCommand = `npx zskills add manu14357/zskills --skill ${skill.slug}`;
   const editedLabel = skill.lastEditedAt ? relativeTime(skill.lastEditedAt) : "recently";
 
   return (

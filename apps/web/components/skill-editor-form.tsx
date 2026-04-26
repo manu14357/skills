@@ -273,7 +273,7 @@ export function SkillEditorForm({
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-text-muted">Install command</p>
             <div className="flex items-center gap-2 rounded-lg border border-border bg-black/60 px-3 py-2.5">
               <code className="flex-1 truncate font-mono text-[11px] text-zinc-300">
-                {`npx askills add your-org/askills --skill ${normalized || "skill-name"}`}
+                {`npx zskills add your-org/zskills --skill ${normalized || "skill-name"}`}
               </code>
             </div>
           </div>

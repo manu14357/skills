@@ -23,9 +23,9 @@ type Manifest = {
 };
 
 const VERSION = "0.1.0";
-const DEFAULT_REPO = "manu14357/askills";
+const DEFAULT_REPO = "manu14357/zskills";
 const GITHUB_API_BASE = "https://api.github.com";
-const MANIFEST_DIR = path.join(os.homedir(), ".askills");
+const MANIFEST_DIR = path.join(os.homedir(), ".zskills");
 const MANIFEST_FILE = path.join(MANIFEST_DIR, "installed.json");
 
 function normalizeSkillName(value: string): string {
@@ -75,7 +75,7 @@ function buildSkillsDirApiUrl(repo: string): string {
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, {
     headers: {
-      "User-Agent": "askills-cli"
+      "User-Agent": "zskills-cli"
     }
   });
 
@@ -89,7 +89,7 @@ async function fetchJson<T>(url: string): Promise<T> {
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
-      "User-Agent": "askills-cli"
+      "User-Agent": "zskills-cli"
     }
   });
 
@@ -274,7 +274,7 @@ async function commandFind(query: string, options: { repo?: string }) {
 
   for (const skill of filtered) {
     console.log(`${skill.name} - ${skill.description}`);
-    console.log(`  npx askills add ${repo} --skill ${skill.name}`);
+    console.log(`  npx zskills add ${repo} --skill ${skill.name}`);
   }
 }
 
@@ -402,7 +402,7 @@ async function commandInit(name: string) {
 }
 
 const program = new Command();
-program.name("askills").description("ASkills CLI").version(VERSION);
+program.name("zskills").description("ZSkills CLI").version(VERSION);
 
 program
   .command("add")
@@ -459,6 +459,6 @@ program.command("init").argument("<name>", "New skill name").action(commandInit)
 
 program.parseAsync().catch((error) => {
   const message = error instanceof Error ? error.message : "Unexpected error";
-  console.error(`askills error: ${message}`);
+  console.error(`zskills error: ${message}`);
   process.exit(1);
 });

@@ -10,7 +10,7 @@ type SkillCardProps = {
 };
 
 export function SkillCard({ skill }: SkillCardProps) {
-  const installCommand = `npx askills add your-org/askills --skill ${skill.slug}`;
+  const installCommand = `npx zskills add your-org/zskills --skill ${skill.slug}`;
 
   const editedLabel = skill.lastEditedAt
     ? `edited ${new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(

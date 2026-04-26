@@ -1,11 +1,11 @@
 {
-  "name": "askills",
+  "name": "zskills",
   "version": "0.1.0",
   "description": "The open registry CLI for agent skills",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "askills": "dist/index.js"
+    "zskills": "dist/index.js"
   },
   "files": [
     "dist"

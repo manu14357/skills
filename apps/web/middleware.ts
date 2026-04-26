@@ -44,8 +44,8 @@ export async function middleware(request: NextRequest) {
   const ip = forwarded?.split(",")[0]?.trim() || "127.0.0.1";
 
   const result = pathname.startsWith("/api/submit")
-    ? await hitUpstashCounter("askills:submit", ip, 3)
-    : await hitUpstashCounter("askills:edit", ip, 10);
+    ? await hitUpstashCounter("zskills:submit", ip, 3)
+    : await hitUpstashCounter("zskills:edit", ip, 10);
 
   if (!result.success) {
     return NextResponse.json(

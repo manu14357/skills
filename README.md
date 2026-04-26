@@ -1,8 +1,8 @@
-# ASkills
+# ZSkills
 
 The open registry for agent skills - built by everyone, for every agent.
 
-ASkills is a no-login, GitHub-native platform for `SKILL.md` files. Every skill is stored in this repository under `skills/<skill-name>/SKILL.md`. The website and CLI read from GitHub, and submissions/edits are created as pull requests.
+ZSkills is a no-login, GitHub-native platform for `SKILL.md` files. Every skill is stored in this repository under `skills/<skill-name>/SKILL.md`. The website and CLI read from GitHub, and submissions/edits are created as pull requests.
 
 ## Monorepo Layout
 
@@ -11,7 +11,7 @@ ASkills is a no-login, GitHub-native platform for `SKILL.md` files. Every skill 
 ├── apps/
 │   └── web/                 # Next.js 15 app (App Router)
 ├── packages/
-│   └── cli/                 # askills npm CLI
+│   └── cli/                 # zskills npm CLI
 ├── skills/                  # Skill registry (database)
 ├── .github/workflows/       # validate + auto-merge automation
 ├── .env.example
@@ -52,41 +52,41 @@ Built with Next.js 15 + TypeScript + Tailwind.
 
 ## CLI (packages/cli)
 
-Package name: `askills`
+Package name: `zskills`
 
 ### Quick start
 
 ```bash
 # Install globally
-npm i -g askills
+npm i -g zskills
 
-# Add all skills from the registry (defaults to manu14357/askills)
-askills add manu14357/askills
+# Add all skills from the registry (defaults to manu14357/zskills)
+zskills add manu14357/zskills
 
 # Add a single skill for a specific agent
-askills add manu14357/askills --skill frontend-design
-askills add manu14357/askills --skill frontend-design -a claude-code
-askills add manu14357/askills --skill frontend-design -a claude-code -a cursor
+zskills add manu14357/zskills --skill frontend-design
+zskills add manu14357/zskills --skill frontend-design -a claude-code
+zskills add manu14357/zskills --skill frontend-design -a claude-code -a cursor
 
 # Install globally (not just the current project)
-askills add manu14357/askills --global
+zskills add manu14357/zskills --global
 ```
 
 ### All commands
 
 ```bash
-askills add <repo>            # Install skills from a registry repo
-askills list                  # List all available skills in the default registry
-askills list --installed      # List locally installed skills
-askills find <query>          # Search skills by name or description
-askills check                 # Check installed skills for updates
-askills update                # Update all installed skills to latest
-askills remove <skill>        # Remove a specific installed skill
-askills remove --all          # Remove all installed skills
-askills init <name>           # Scaffold a new SKILL.md locally
+zskills add <repo>            # Install skills from a registry repo
+zskills list                  # List all available skills in the default registry
+zskills list --installed      # List locally installed skills
+zskills find <query>          # Search skills by name or description
+zskills check                 # Check installed skills for updates
+zskills update                # Update all installed skills to latest
+zskills remove <skill>        # Remove a specific installed skill
+zskills remove --all          # Remove all installed skills
+zskills init <name>           # Scaffold a new SKILL.md locally
 ```
 
-The CLI installs skills into agent-specific directories in your project or globally. The default registry is `manu14357/askills`.
+The CLI installs skills into agent-specific directories in your project or globally. The default registry is `manu14357/zskills`.
 
 ## SKILL.md Standard
 
@@ -142,7 +142,7 @@ UPSTASH_REDIS_REST_TOKEN=
 VERCEL_DEPLOY_HOOK_URL=
 ```
 
-If you are running your own ASkills repo, replace `manu14357/askills` with your own `owner/repo`.
+If you are running your own ZSkills repo, replace `manu14357/zskills` with your own `owner/repo`.
 
 ## Local Development
 
@@ -150,12 +150,12 @@ If you are running your own ASkills repo, replace `manu14357/askills` with your 
 npm install
 
 # Web app (Turbopack enabled)
-npm run dev -w @askills/web
+npm run dev -w @zskills/web
 
 # CLI — run any command locally via tsx
-npm run dev -w askills -- list
-npm run dev -w askills -- add manu14357/askills --skill frontend-design
-npm run dev -w askills -- --help
+npm run dev -w zskills -- list
+npm run dev -w zskills -- add manu14357/zskills --skill frontend-design
+npm run dev -w zskills -- --help
 ```
 
 ## Build
@@ -168,14 +168,14 @@ npm run build
 
 - Deploy `apps/web` to Vercel
 - Set environment variables in Vercel project settings
-- Point `GITHUB_REPO_OWNER` + `GITHUB_REPO_NAME` at your ASkills registry repo
+- Point `GITHUB_REPO_OWNER` + `GITHUB_REPO_NAME` at your ZSkills registry repo
 
 ## Status
 
 This repository now includes:
 
-- Next.js ASkills MVP website
-- askills CLI package scaffold with full command set
+- Next.js ZSkills MVP website
+- zskills CLI package scaffold with full command set
 - GitHub validation and auto-merge workflows
 - Existing `skills/` content as registry data
 

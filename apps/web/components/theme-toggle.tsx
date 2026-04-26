@@ -6,14 +6,14 @@ export function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const stored = localStorage.getItem("askills-theme");
+    const stored = localStorage.getItem("zskills-theme");
     if (stored === "light" || stored === "dark") setTheme(stored);
   }, []);
 
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    localStorage.setItem("askills-theme", next);
+    localStorage.setItem("zskills-theme", next);
     document.documentElement.setAttribute("data-theme", next);
   }
 

@@ -1,5 +1,5 @@
 {
-  "name": "askills-monorepo",
+  "name": "zskills-monorepo",
   "private": true,
   "version": "0.1.0",
   "workspaces": [
@@ -7,10 +7,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev -w @askills/web",
-    "build": "npm run build -w @askills/web && npm run build -w askills",
-    "lint": "npm run lint -w @askills/web",
-    "typecheck": "npm run typecheck -w @askills/web && npm run typecheck -w askills"
+    "dev": "npm run dev -w @zskills/web",
+    "build": "npm run build -w @zskills/web && npm run build -w zskills",
+    "lint": "npm run lint -w @zskills/web",
+    "typecheck": "npm run typecheck -w @zskills/web && npm run typecheck -w zskills"
   },
   "engines": {
     "node": ">=20"

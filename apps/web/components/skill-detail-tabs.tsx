@@ -187,7 +187,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
                 : "No related discussions yet"}
             </p>
             <a
-              href={`https://github.com/manu14357/askills/pulls?q=${encodeURIComponent(skill.slug)}`}
+              href={`https://github.com/manu14357/zskills/pulls?q=${encodeURIComponent(skill.slug)}`}
               target="_blank"
               rel="noreferrer"
               className="rounded-md border border-border px-3 py-1.5 text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"
@@ -210,7 +210,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
             <div className="rounded-lg border border-dashed border-border p-6 text-center">
               <p className="text-sm text-text-muted">No discussions yet for this skill.</p>
               <a
-                href={`https://github.com/manu14357/askills/issues/new?title=${encodeURIComponent(`[${skill.slug}] `)}`}
+                href={`https://github.com/manu14357/zskills/issues/new?title=${encodeURIComponent(`[${skill.slug}] `)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-2 inline-block text-xs text-primary hover:underline"
