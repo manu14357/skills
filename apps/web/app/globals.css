@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Dark theme (default) ─── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  /* RGB channels — used as: rgb(var(--X) / alpha) */
+  --color-bg:           0 0 0;
+  --color-surface:      10 10 10;
+  --color-border:       30 30 30;
+  --color-primary:      255 107 0;
+  --color-success:      34 197 94;
+  --color-warning:      251 146 60;
+  --color-error:        239 68 68;
+  --color-text-primary: 255 255 255;
+  --color-text-muted:   136 136 136;
+}
+
+/* ─── Light theme ─── */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg:           255 255 255;
+  --color-surface:      248 248 248;
+  --color-border:       230 230 230;
+  --color-primary:      220 88 0;
+  --color-success:      22 163 74;
+  --color-warning:      217 119 6;
+  --color-error:        220 38 38;
+  --color-text-primary: 0 0 0;
+  --color-text-muted:   100 100 100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: rgb(var(--color-bg));
+  color: rgb(var(--color-text-primary));
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", ui-sans-serif, system-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(255, 107, 0, 0.3);
+  color: #fff;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
+code, pre {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #ccc; }
+
+/* ─── Markdown viewer ─── */
+.markdown-viewer {
+  padding: 1.5rem;
+}
+@media (min-width: 640px) {
+  .markdown-viewer { padding: 2rem; }
+}
+
+/* Reset the wmde base colours so our variables take over */
+.markdown-viewer .wmde-markdown,
+.markdown-viewer .wmde-markdown-var {
+  background-color: transparent !important;
+  color: rgb(var(--color-text-primary)) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", ui-sans-serif, system-ui !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.8 !important;
+}
+
+/* Headings */
+.markdown-viewer .wmde-markdown h1,
+.markdown-viewer .wmde-markdown h2,
+.markdown-viewer .wmde-markdown h3,
+.markdown-viewer .wmde-markdown h4,
+.markdown-viewer .wmde-markdown h5,
+.markdown-viewer .wmde-markdown h6 {
+  color: rgb(var(--color-text-primary)) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  margin-top: 1.75em !important;
+  margin-bottom: 0.6em !important;
+}
+.markdown-viewer .wmde-markdown h1:first-child,
+.markdown-viewer .wmde-markdown h2:first-child {
+  margin-top: 0 !important;
+}
+.markdown-viewer .wmde-markdown h1 {
+  font-size: 1.6rem !important;
+  border-bottom: 1px solid rgb(var(--color-border)) !important;
+  padding-bottom: 0.5rem !important;
+}
+.markdown-viewer .wmde-markdown h2 {
+  font-size: 1.25rem !important;
+  border-bottom: 1px solid rgb(var(--color-border)) !important;
+  padding-bottom: 0.35rem !important;
+}
+.markdown-viewer .wmde-markdown h3 { font-size: 1.1rem !important; }
+.markdown-viewer .wmde-markdown h4 { font-size: 0.95rem !important; }
+
+/* Body text */
+.markdown-viewer .wmde-markdown p {
+  color: rgb(var(--color-text-muted)) !important;
+  margin: 0.85em 0 !important;
+}
+.markdown-viewer .wmde-markdown strong {
+  color: rgb(var(--color-text-primary)) !important;
+  font-weight: 600 !important;
+}
+.markdown-viewer .wmde-markdown em {
+  color: rgb(var(--color-text-muted)) !important;
+}
+
+/* Inline code */
+.markdown-viewer .wmde-markdown :not(pre) > code {
+  background: rgb(var(--color-primary) / 0.12) !important;
+  color: rgb(var(--color-primary)) !important;
+  padding: 0.15em 0.45em !important;
+  border-radius: 5px !important;
+  font-size: 0.84em !important;
+  font-family: "JetBrains Mono", ui-monospace, monospace !important;
+  font-weight: 500 !important;
+  border: none !important;
+}
+[data-theme="light"] .markdown-viewer .wmde-markdown :not(pre) > code {
+  background: rgb(var(--color-primary) / 0.1) !important;
+}
+
+/* Code blocks */
+.markdown-viewer .wmde-markdown pre {
+  background: rgb(var(--color-surface)) !important;
+  border: 1px solid rgb(var(--color-border)) !important;
+  border-radius: 10px !important;
+  padding: 1.1rem 1.25rem !important;
+  overflow-x: auto !important;
+  margin: 1.2em 0 !important;
+  position: relative !important;
+}
+[data-theme="dark"] .markdown-viewer .wmde-markdown pre {
+  background: rgb(15 15 15) !important;
+}
+.markdown-viewer .wmde-markdown pre code {
+  background: transparent !important;
+  color: rgb(var(--color-text-primary)) !important;
+  padding: 0 !important;
+  font-size: 0.82rem !important;
+  line-height: 1.65 !important;
+  border: none !important;
+}
+[data-theme="light"] .markdown-viewer .wmde-markdown pre code {
+  color: rgb(30 30 30) !important;
+}
+
+/* Blockquote */
+.markdown-viewer .wmde-markdown blockquote {
+  border-left: 3px solid rgb(var(--color-primary)) !important;
+  margin: 1.25em 0 !important;
+  padding: 0.6em 1.1em !important;
+  background: rgb(var(--color-primary) / 0.06) !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+.markdown-viewer .wmde-markdown blockquote p {
+  color: rgb(var(--color-text-muted)) !important;
+  margin: 0 !important;
+}
+
+/* Lists */
+.markdown-viewer .wmde-markdown ul,
+.markdown-viewer .wmde-markdown ol {
+  color: rgb(var(--color-text-muted)) !important;
+  padding-left: 1.5em !important;
+  margin: 0.75em 0 !important;
+}
+.markdown-viewer .wmde-markdown li {
+  margin: 0.35em 0 !important;
+  line-height: 1.7 !important;
+}
+.markdown-viewer .wmde-markdown li > p {
+  margin: 0.2em 0 !important;
+}
+.markdown-viewer .wmde-markdown ul li::marker {
+  color: rgb(var(--color-primary)) !important;
+}
+.markdown-viewer .wmde-markdown ol li::marker {
+  color: rgb(var(--color-primary)) !important;
+  font-weight: 600 !important;
+}
+
+/* Links */
+.markdown-viewer .wmde-markdown a {
+  color: rgb(var(--color-primary)) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  text-decoration-color: rgb(var(--color-primary) / 0.4) !important;
+  transition: text-decoration-color 0.15s !important;
+}
+.markdown-viewer .wmde-markdown a:hover {
+  text-decoration-color: rgb(var(--color-primary)) !important;
+}
+
+/* Horizontal rule */
+.markdown-viewer .wmde-markdown hr {
+  border: none !important;
+  border-top: 1px solid rgb(var(--color-border)) !important;
+  margin: 2em 0 !important;
+}
+
+/* Tables */
+.markdown-viewer .wmde-markdown table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 1.25em 0 !important;
+  font-size: 0.875rem !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid rgb(var(--color-border)) !important;
+}
+.markdown-viewer .wmde-markdown table th {
+  background: rgb(var(--color-surface)) !important;
+  color: rgb(var(--color-text-primary)) !important;
+  font-weight: 600 !important;
+  padding: 0.65em 1em !important;
+  text-align: left !important;
+  border-bottom: 1px solid rgb(var(--color-border)) !important;
+  border-right: 1px solid rgb(var(--color-border)) !important;
+}
+.markdown-viewer .wmde-markdown table th:last-child { border-right: none !important; }
+.markdown-viewer .wmde-markdown table td {
+  color: rgb(var(--color-text-muted)) !important;
+  padding: 0.55em 1em !important;
+  border-bottom: 1px solid rgb(var(--color-border)) !important;
+  border-right: 1px solid rgb(var(--color-border)) !important;
+}
+.markdown-viewer .wmde-markdown table td:last-child { border-right: none !important; }
+.markdown-viewer .wmde-markdown table tr:last-child td { border-bottom: none !important; }
+.markdown-viewer .wmde-markdown table tr:nth-child(even) td {
+  background: rgb(var(--color-surface) / 0.6) !important;
+}
+
+/* Images */
+.markdown-viewer .wmde-markdown img {
+  max-width: 100% !important;
+  border-radius: 8px !important;
+  border: 1px solid rgb(var(--color-border)) !important;
+  margin: 0.5em 0 !important;
+}
+
+/* Task checkboxes */
+.markdown-viewer .wmde-markdown input[type="checkbox"] {
+  accent-color: rgb(var(--color-primary)) !important;
+}
+
+/* Override any leftover wmde backgrounds */
+.markdown-viewer [class*="wmde-markdown"] {
+  background-color: transparent !important;
+}
+

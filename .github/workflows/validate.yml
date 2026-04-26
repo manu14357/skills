@@ -1,0 +1,129 @@
+name: Validate Skill PR
+
+on:
+  pull_request:
+    paths:
+      - "skills/**/SKILL.md"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate changed skills
+        id: validate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.payload.pull_request.number;
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100
+            });
+
+            const skillFiles = files.filter((f) => /^skills\/[a-z0-9-]+\/SKILL\.md$/.test(f.filename));
+            const errors = [];
+            const successes = [];
+
+            if (skillFiles.length === 0) {
+              errors.push('No SKILL.md changes found in skills/<name>/SKILL.md format.');
+            }
+
+            function parseFrontmatter(content) {
+              const match = content.match(/^---\n([\s\S]*?)\n---/);
+              if (!match) return {};
+              const lines = match[1].split('\n');
+              const out = {};
+              let currentListKey = null;
+              for (const rawLine of lines) {
+                const line = rawLine.trimEnd();
+                if (!line.trim()) continue;
+                const keyValue = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+                if (keyValue) {
+                  const [, key, value] = keyValue;
+                  if (value === '') {
+                    out[key] = [];
+                    currentListKey = key;
+                  } else {
+                    out[key] = value;
+                    currentListKey = null;
+                  }
+                  continue;
+                }
+                const listItem = line.match(/^\s*-\s*(.+)$/);
+                if (listItem && currentListKey) {
+                  out[currentListKey].push(listItem[1]);
+                }
+              }
+              return out;
+            }
+
+            const existingSkills = new Set(
+              fs.readdirSync('skills', { withFileTypes: true })
+                .filter((d) => d.isDirectory())
+                .map((d) => d.name)
+            );
+
+            for (const file of skillFiles) {
+              const [, folder] = file.filename.split('/');
+              const content = fs.readFileSync(file.filename, 'utf8');
+              const fm = parseFrontmatter(content);
+
+              if (!fm.name) {
+                errors.push(`${file.filename}: missing required frontmatter field 'name'.`);
+                continue;
+              }
+
+              if (!fm.description) {
+                errors.push(`${file.filename}: missing required frontmatter field 'description'.`);
+                continue;
+              }
+
+              if (fm.name !== folder) {
+                errors.push(`${file.filename}: folder name (${folder}) must match frontmatter name (${fm.name}).`);
+              }
+
+              if (file.status === 'added') {
+                const duplicate = [...existingSkills].filter((name) => name === fm.name && name !== folder);
+                if (duplicate.length > 0) {
+                  errors.push(`${file.filename}: duplicate skill name '${fm.name}' exists.`);
+                }
+              }
+
+              successes.push(`${file.filename}: valid`);
+            }
+
+            const body = [
+              '## ASkills Validation',
+              '',
+              successes.length ? `### Passed\n${successes.map((x) => `- ✅ ${x}`).join('\n')}` : '',
+              errors.length ? `### Failed\n${errors.map((x) => `- ❌ ${x}`).join('\n')}` : ''
+            ].filter(Boolean).join('\n\n');
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pull_number,
+              body
+            });
+
+            if (errors.length > 0) {
+              core.setFailed(`Validation failed:\n${errors.join('\n')}`);
+            }
+
+            core.setOutput('validated', 'true');

@@ -1,0 +1,55 @@
+name: Auto Merge Valid Skill PRs
+
+on:
+  workflow_run:
+    workflows: ["Validate Skill PR"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto merge PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prs = context.payload.workflow_run.pull_requests || [];
+
+            if (!prs.length) {
+              core.info('No pull requests attached to this workflow run.');
+              return;
+            }
+
+            for (const pr of prs) {
+              try {
+                await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: pr.number,
+                  merge_method: 'squash'
+                });
+
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: pr.number,
+                  body: `✅ Skill is now live at https://askills.dev/s/${pr.head.ref.split('/')[1] || ''}`
+                });
+              } catch (error) {
+                core.warning(`Unable to merge PR #${pr.number}: ${error.message}`);
+              }
+            }
+
+      - name: Trigger Vercel deploy hook
+        if: ${{ env.VERCEL_DEPLOY_HOOK_URL != '' }}
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          curl -X POST "$VERCEL_DEPLOY_HOOK_URL"

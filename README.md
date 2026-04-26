@@ -1,186 +1,181 @@
-# Skills
+# ASkills
 
-A curated, open-source collection of reusable AI skills — structured prompts and instructions designed to give AI assistants specialized capabilities across different domains.
+The open registry for agent skills - built by everyone, for every agent.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Contributors](https://img.shields.io/github/contributors/manu14357/skills)](https://github.com/manu14357/skills/graphs/contributors)
-[![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red)](https://github.com/manu14357/skills)
+ASkills is a no-login, GitHub-native platform for `SKILL.md` files. Every skill is stored in this repository under `skills/<skill-name>/SKILL.md`. The website and CLI read from GitHub, and submissions/edits are created as pull requests.
 
----
-
-## What is this?
-
-Each **skill** is a self-contained folder with a `SKILL.md` file that describes:
-
-- **What** the skill does
-- **When** to use it
-- **How** the AI should behave when the skill is active
-
-Skills can be composed together — multiple skills can apply to a single request.
-
----
-
-## Project Structure
+## Monorepo Layout
 
 ```
-skills/
-├── skills/                    # Individual skill folders
-│   └── <skill-name>/
-│       ├── SKILL.md           # Skill instructions & metadata
-│       └── examples/          # (optional) usage examples
-├── docs/
-│   ├── how-to-add-a-skill.md  # Guide for contributors
-│   └── skill-template.md      # Template for new skills
-├── CONTRIBUTING.md
-├── CONTRIBUTORS.md
-├── CODE_OF_CONDUCT.md
-├── LICENSE
+.
+├── apps/
+│   └── web/                 # Next.js 15 app (App Router)
+├── packages/
+│   └── cli/                 # askills npm CLI
+├── skills/                  # Skill registry (database)
+├── .github/workflows/       # validate + auto-merge automation
+├── .env.example
 └── README.md
 ```
 
+## Core Principles
+
+- No database for skills
+- No login required for contributors
+- GitHub pull requests are the write path
+- `skills/` directory is the single source of truth
+
+## Website (apps/web)
+
+Built with Next.js 15 + TypeScript + Tailwind.
+
+### Main Pages
+
+- `/` homepage with hero, stats, search, filters, sorting, and install snippets
+- `/submit` submit a new skill (creates GitHub PR)
+- `/s/[skill-name]` skill detail with overview/raw/history/discussion tabs
+- `/edit/[skill-name]` edit an existing skill (creates GitHub PR)
+- `/fork/[skill-name]` fork skill into a new one
+- `/agent/[agent-name]` browse by agent
+- `/category/[category]` browse by category
+- `/leaderboard` contributors, installs, and recent edits
+- `/docs` CLI and SKILL.md reference
+
+### API Routes
+
+- `GET /api/skills/[name]/skill.md` - raw SKILL.md endpoint for CLI
+- `GET /api/skills/[name]/version/[sha]` - historical version for diff
+- `POST /api/submit` - create PR adding a skill
+- `POST /api/edit` - create PR editing a skill
+- `POST /api/revert` - create PR reverting to historical version
+- `POST /api/stats/copy` - install-copy telemetry counter
+
+## CLI (packages/cli)
+
+Package name: `askills`
+
+### Quick start
+
+```bash
+# Install globally
+npm i -g askills
+
+# Add all skills from the registry (defaults to manu14357/askills)
+askills add manu14357/askills
+
+# Add a single skill for a specific agent
+askills add manu14357/askills --skill frontend-design
+askills add manu14357/askills --skill frontend-design -a claude-code
+askills add manu14357/askills --skill frontend-design -a claude-code -a cursor
+
+# Install globally (not just the current project)
+askills add manu14357/askills --global
+```
+
+### All commands
+
+```bash
+askills add <repo>            # Install skills from a registry repo
+askills list                  # List all available skills in the default registry
+askills list --installed      # List locally installed skills
+askills find <query>          # Search skills by name or description
+askills check                 # Check installed skills for updates
+askills update                # Update all installed skills to latest
+askills remove <skill>        # Remove a specific installed skill
+askills remove --all          # Remove all installed skills
+askills init <name>           # Scaffold a new SKILL.md locally
+```
+
+The CLI installs skills into agent-specific directories in your project or globally. The default registry is `manu14357/askills`.
+
+## SKILL.md Standard
+
+Each skill folder must contain exactly one `SKILL.md` with YAML frontmatter:
+
+```yaml
 ---
-
-## Getting Started
-
-### Using a Skill
-
-1. Browse the [`skills/`](./skills/) directory
-2. Open the skill folder relevant to your use case
-3. Read the `SKILL.md` to understand the skill's purpose and trigger conditions
-4. Reference the skill in your AI assistant or tool as instructed
-
-### Adding a Skill
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to contribute a new skill.
-
-A ready-to-use template is at [docs/skill-template.md](./docs/skill-template.md).
-
+name: skill-name
+description: What this skill does and when to trigger it
+category: frontend
+agents:
+  - claude-code
+author: optional-handle
 ---
+```
 
-## Available Skills
+Required fields: `name`, `description`
+Optional fields: `category`, `agents`, `author`
 
-### Azure & Cloud Skills (18)
+## GitHub Automation
 
-- [appinsights-instrumentation](./skills/appinsights-instrumentation/SKILL.md)
-- [azure-aigateway](./skills/azure-aigateway/SKILL.md)
-- [azure-cloud-migrate](./skills/azure-cloud-migrate/SKILL.md)
-- [azure-compliance](./skills/azure-compliance/SKILL.md)
-- [azure-compute](./skills/azure-compute/SKILL.md)
-- [azure-deploy](./skills/azure-deploy/SKILL.md)
-- [azure-diagnostics](./skills/azure-diagnostics/SKILL.md)
-- [azure-hosted-copilot-sdk](./skills/azure-hosted-copilot-sdk/SKILL.md)
-- [azure-kusto](./skills/azure-kusto/SKILL.md)
-- [azure-messaging](./skills/azure-messaging/SKILL.md)
-- [azure-prepare](./skills/azure-prepare/SKILL.md)
-- [azure-quotas](./skills/azure-quotas/SKILL.md)
-- [azure-rbac](./skills/azure-rbac/SKILL.md)
-- [azure-resource-lookup](./skills/azure-resource-lookup/SKILL.md)
-- [azure-resource-visualizer](./skills/azure-resource-visualizer/SKILL.md)
-- [azure-storage](./skills/azure-storage/SKILL.md)
-- [azure-validate](./skills/azure-validate/SKILL.md)
-- [entra-app-registration](./skills/entra-app-registration/SKILL.md)
+### Validate Skill PR (`.github/workflows/validate.yml`)
 
-### Minimalist Entrepreneur Skills (10)
+Runs on pull requests touching `skills/**/SKILL.md` and checks:
 
-- [company-values](./skills/company-values/SKILL.md)
-- [find-community](./skills/find-community/SKILL.md)
-- [first-customers](./skills/first-customers/SKILL.md)
-- [grow-sustainably](./skills/grow-sustainably/SKILL.md)
-- [marketing-plan](./skills/marketing-plan/SKILL.md)
-- [minimalist-review](./skills/minimalist-review/SKILL.md)
-- [mvp](./skills/mvp/SKILL.md)
-- [pricing](./skills/pricing/SKILL.md)
-- [processize](./skills/processize/SKILL.md)
-- [validate-idea](./skills/validate-idea/SKILL.md)
+- SKILL.md exists in `skills/<name>/SKILL.md`
+- frontmatter has `name`
+- frontmatter has `description`
+- folder name matches `name`
+- duplicate skill naming guard
 
-### Development & Engineering (15)
+Posts a pass/fail comment on the PR.
 
-- [codebase-migrate](./skills/codebase-migrate/SKILL.md)
-- [deploy-pipeline](./skills/deploy-pipeline/SKILL.md)
-- [gh-address-comments](./skills/gh-address-comments/SKILL.md)
-- [gh-fix-ci](./skills/gh-fix-ci/SKILL.md)
-- [helium-mcp](./skills/helium-mcp/SKILL.md)
-- [linear](./skills/linear/SKILL.md)
-- [mcp-builder](./skills/mcp-builder/SKILL.md)
-- [pr-review-ci-fix](./skills/pr-review-ci-fix/SKILL.md)
-- [skill-creator](./skills/skill-creator/SKILL.md)
-- [skill-installer](./skills/skill-installer/SKILL.md)
-- [template-skill](./skills/template-skill/SKILL.md)
-- [webapp-testing](./skills/webapp-testing/SKILL.md)
+### Auto Merge (`.github/workflows/auto-merge.yml`)
 
-### Communication & Documentation (9)
+After successful validation:
 
-- [changelog-generator](./skills/changelog-generator/SKILL.md)
-- [content-research-writer](./skills/content-research-writer/SKILL.md)
-- [email-draft-polish](./skills/email-draft-polish/SKILL.md)
-- [internal-comms](./skills/internal-comms/SKILL.md)
-- [meeting-insights-analyzer](./skills/meeting-insights-analyzer/SKILL.md)
-- [meeting-notes-and-actions](./skills/meeting-notes-and-actions/SKILL.md)
-- [tailored-resume-generator](./skills/tailored-resume-generator/SKILL.md)
-- [image-enhancer](./skills/image-enhancer/SKILL.md)
-- [video-downloader](./skills/video-downloader/SKILL.md)
+- auto-merges PR to `main`
+- comments with live link message
+- optionally triggers a Vercel deploy hook
 
-### Project & Knowledge Management (6)
+## Environment Variables
 
-- [issue-triage](./skills/issue-triage/SKILL.md)
-- [notion-knowledge-capture](./skills/notion-knowledge-capture/SKILL.md)
-- [notion-meeting-intelligence](./skills/notion-meeting-intelligence/SKILL.md)
-- [notion-research-documentation](./skills/notion-research-documentation/SKILL.md)
-- [notion-spec-to-implementation](./skills/notion-spec-to-implementation/SKILL.md)
-- [support-ticket-triage](./skills/support-ticket-triage/SKILL.md)
+Copy from `.env.example`:
 
-### Sales & Research (6)
+```env
+GITHUB_READ_TOKEN=
+GITHUB_WRITE_TOKEN=
+GITHUB_REPO_OWNER=manu14357
+GITHUB_REPO_NAME=skills
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+VERCEL_DEPLOY_HOOK_URL=
+```
 
-- [competitive-ads-extractor](./skills/competitive-ads-extractor/SKILL.md)
-- [domain-name-brainstormer](./skills/domain-name-brainstormer/SKILL.md)
-- [lead-research-assistant](./skills/lead-research-assistant/SKILL.md)
-- [langsmith-fetch](./skills/langsmith-fetch/SKILL.md)
-- [raffle-winner-picker](./skills/raffle-winner-picker/SKILL.md)
-- [sentry-triage](./skills/sentry-triage/SKILL.md)
+If you are running your own ASkills repo, replace `manu14357/askills` with your own `owner/repo`.
 
-### Design & UI (5)
+## Local Development
 
-- [canvas-design](./skills/canvas-design/SKILL.md)
-- [frontend-design](./skills/frontend-design/SKILL.md)
-- [paperjsx](./skills/paperjsx/SKILL.md)
-- [shadcn](./skills/shadcn/SKILL.md)
-- [theme-factory](./skills/theme-factory/SKILL.md)
+```bash
+npm install
 
-### Marketing & Content (6)
+# Web app (Turbopack enabled)
+npm run dev -w @askills/web
 
-- [brand-guidelines](./skills/brand-guidelines/SKILL.md)
-- [connect](./skills/connect/SKILL.md)
-- [connect-apps](./skills/connect-apps/SKILL.md)
-- [create-plan](./skills/create-plan/SKILL.md)
-- [file-organizer](./skills/file-organizer/SKILL.md)
-- [invoice-organizer](./skills/invoice-organizer/SKILL.md)
+# CLI — run any command locally via tsx
+npm run dev -w askills -- list
+npm run dev -w askills -- add manu14357/askills --skill frontend-design
+npm run dev -w askills -- --help
+```
 
-### Automation & Integration (5)
+## Build
 
-- [composio-skills](./skills/composio-skills/SKILL.md)
-- [datadog-logs](./skills/datadog-logs/SKILL.md)
-- [skill-share](./skills/skill-share/SKILL.md)
-- [slack-gif-creator](./skills/slack-gif-creator/SKILL.md)
-- [spreadsheet-formula-helper](./skills/spreadsheet-formula-helper/SKILL.md)
+```bash
+npm run build
+```
 
-**Total: 77 skills**
+## Deploy
 
----
+- Deploy `apps/web` to Vercel
+- Set environment variables in Vercel project settings
+- Point `GITHUB_REPO_OWNER` + `GITHUB_REPO_NAME` at your ASkills registry repo
 
-## Contributing
+## Status
 
-Contributions are welcome! Whether you're fixing a typo, improving an existing skill, or adding a brand new one — please read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
+This repository now includes:
 
----
+- Next.js ASkills MVP website
+- askills CLI package scaffold with full command set
+- GitHub validation and auto-merge workflows
+- Existing `skills/` content as registry data
 
-## Contributors
-
-Thanks to everyone who has contributed to this project! See [CONTRIBUTORS.md](./CONTRIBUTORS.md).
-
----
-
-## License
-
-This project is licensed under the [MIT License](./LICENSE).
-
-© 2026 [manu14357](https://github.com/manu14357) and contributors.

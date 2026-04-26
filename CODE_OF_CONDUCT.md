@@ -34,7 +34,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting the maintainers at [GitHub Issues](https://github.com/manu14357/skills/issues).
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting the maintainers at [GitHub Issues](https://github.com/manu14357/askills/issues).
 
 All complaints will be reviewed and investigated promptly and fairly.
 

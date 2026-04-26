@@ -13,3 +13,14 @@ Thumbs.db
 
 # Node (if any tooling is added later)
 node_modules/
+.next/
+dist/
+coverage/
+*.tsbuildinfo
+apps/web/.next/
+
+# Environment — never commit real secrets
+.env
+.env.local
+.env.*.local
+.env.production

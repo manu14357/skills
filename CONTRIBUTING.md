@@ -26,7 +26,7 @@ By participating, you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.
 
 - **Add a new skill** — Create a folder under `skills/` with a `SKILL.md`
 - **Improve an existing skill** — Refine instructions, fix typos, add examples
-- **Report a bug or issue** — Open a [GitHub Issue](https://github.com/manu14357/skills/issues)
+- **Report a bug or issue** — Open a [GitHub Issue](https://github.com/manu14357/askills/issues)
 - **Suggest a skill** — Open an issue with the `skill-request` label
 - **Improve documentation** — Update READMEs, guides, or templates
 
@@ -69,7 +69,7 @@ By participating, you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.
 
 ## Reporting Issues
 
-Open an issue at [github.com/manu14357/skills/issues](https://github.com/manu14357/skills/issues) with:
+Open an issue at [github.com/manu14357/askills/issues](https://github.com/manu14357/askills/issues) with:
 
 - A clear title
 - What you expected vs. what happened
