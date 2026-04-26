@@ -22,6 +22,14 @@ type Manifest = {
   entries: ManifestEntry[];
 };
 
+type GitHubContentEntry = {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+  download_url: string | null;
+  url: string;
+};
+
 const VERSION = "0.1.0";
 const DEFAULT_REPO = "manu14357/zskills";
 const GITHUB_API_BASE = "https://api.github.com";
@@ -72,6 +80,11 @@ function buildSkillsDirApiUrl(repo: string): string {
   return `${GITHUB_API_BASE}/repos/${owner}/${name}/contents/skills`;
 }
 
+function buildSkillDirApiUrl(repo: string, skillName: string): string {
+  const { owner, name } = parseRepo(repo);
+  return `${GITHUB_API_BASE}/repos/${owner}/${name}/contents/skills/${skillName}`;
+}
+
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, {
     headers: {
@@ -98,6 +111,86 @@ async function fetchText(url: string): Promise<string> {
   }
 
   return response.text();
+}
+
+async function fetchBuffer(url: string): Promise<Buffer> {
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "zskills-cli"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed (${response.status}) for ${url}`);
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer);
+}
+
+async function fetchSkillDirectoryFiles(repo: string, skillName: string): Promise<Array<{ relativePath: string; content: Buffer }>> {
+  const rootPrefix = `skills/${skillName}`;
+
+  const walk = async (apiUrl: string): Promise<Array<{ relativePath: string; content: Buffer }>> => {
+    const data = await fetchJson<GitHubContentEntry[] | GitHubContentEntry>(apiUrl);
+    const entries = Array.isArray(data) ? data : [data];
+
+    const files = await Promise.all(
+      entries.map(async (entry) => {
+        if (entry.type === "dir") {
+          return walk(entry.url);
+        }
+
+        if (!entry.download_url) {
+          throw new Error(`Missing download URL for ${entry.path}`);
+        }
+
+        const relativePath = path.posix.relative(rootPrefix, entry.path);
+        const content = await fetchBuffer(entry.download_url);
+        return [{ relativePath, content }];
+      })
+    );
+
+    return files.flat();
+  };
+
+  return walk(buildSkillDirApiUrl(repo, skillName));
+}
+
+function hashSkillFiles(files: Array<{ relativePath: string; content: Buffer }>): string {
+  const hash = createHash("sha256");
+  const sorted = [...files].sort((a, b) => a.relativePath.localeCompare(b.relativePath));
+
+  for (const file of sorted) {
+    hash.update(file.relativePath);
+    hash.update("\0");
+    hash.update(file.content);
+    hash.update("\0");
+  }
+
+  return hash.digest("hex");
+}
+
+async function writeSkillFiles(skillDir: string, files: Array<{ relativePath: string; content: Buffer }>): Promise<void> {
+  for (const file of files) {
+    const normalizedRelative = path.normalize(file.relativePath);
+    if (normalizedRelative.startsWith("..") || path.isAbsolute(normalizedRelative)) {
+      throw new Error(`Unsafe file path in skill package: ${file.relativePath}`);
+    }
+
+    const outputPath = path.join(skillDir, normalizedRelative);
+    await fs.mkdir(path.dirname(outputPath), { recursive: true });
+    await fs.writeFile(outputPath, file.content);
+  }
+}
+
+async function resolveInstalledSkillDir(installPath: string): Promise<string> {
+  try {
+    const stat = await fs.stat(installPath);
+    return stat.isDirectory() ? installPath : path.dirname(installPath);
+  } catch {
+    return installPath.toLowerCase().endsWith("skill.md") ? path.dirname(installPath) : installPath;
+  }
 }
 
 async function listRemoteSkillNames(repo: string): Promise<string[]> {
@@ -177,7 +270,11 @@ async function installSkill(options: {
   customPath?: string;
 }): Promise<ManifestEntry> {
   const normalizedSkill = normalizeSkillName(options.skill);
-  const content = await fetchText(buildRawSkillUrl(options.repo, normalizedSkill));
+  const files = await fetchSkillDirectoryFiles(options.repo, normalizedSkill);
+
+  if (files.length === 0) {
+    throw new Error(`No files found for skill: ${normalizedSkill}`);
+  }
 
   let base: string;
   if (options.customPath) {
@@ -189,17 +286,16 @@ async function installSkill(options: {
   }
 
   const skillDir = path.join(base, normalizedSkill);
-  const skillFile = path.join(skillDir, "SKILL.md");
-
+  await fs.rm(skillDir, { recursive: true, force: true });
   await fs.mkdir(skillDir, { recursive: true });
-  await fs.writeFile(skillFile, content, "utf8");
+  await writeSkillFiles(skillDir, files);
 
   return {
     repo: options.repo,
     skill: normalizedSkill,
     agent: options.agent || "custom",
-    installPath: skillFile,
-    hash: hashContent(content),
+    installPath: skillDir,
+    hash: hashSkillFiles(files),
     installedAt: new Date().toISOString()
   };
 }
@@ -336,7 +432,7 @@ async function commandRemove(skill?: string, options?: { all?: boolean; agent?: 
   }
 
   for (const entry of toRemove) {
-    const skillDir = path.dirname(entry.installPath);
+    const skillDir = await resolveInstalledSkillDir(entry.installPath);
     await fs.rm(skillDir, { recursive: true, force: true });
     console.log(`Removed ${entry.skill} for ${entry.agent}`);
   }
@@ -357,8 +453,8 @@ async function commandCheck() {
 
   for (const entry of manifest.entries) {
     try {
-      const latest = await fetchText(buildRawSkillUrl(entry.repo, entry.skill));
-      const latestHash = hashContent(latest);
+      const latestFiles = await fetchSkillDirectoryFiles(entry.repo, entry.skill);
+      const latestHash = hashSkillFiles(latestFiles);
       if (latestHash !== entry.hash) {
         updates += 1;
         console.log(`Update available: ${entry.skill} [${entry.agent}]`);
@@ -387,17 +483,20 @@ async function commandUpdate() {
 
   for (const entry of manifest.entries) {
     try {
-      const latest = await fetchText(buildRawSkillUrl(entry.repo, entry.skill));
-      const latestHash = hashContent(latest);
+      const latestFiles = await fetchSkillDirectoryFiles(entry.repo, entry.skill);
+      const latestHash = hashSkillFiles(latestFiles);
       if (latestHash === entry.hash) {
         continue;
       }
 
-      await fs.mkdir(path.dirname(entry.installPath), { recursive: true });
-      await fs.writeFile(entry.installPath, latest, "utf8");
+      const skillDir = await resolveInstalledSkillDir(entry.installPath);
+      await fs.rm(skillDir, { recursive: true, force: true });
+      await fs.mkdir(skillDir, { recursive: true });
+      await writeSkillFiles(skillDir, latestFiles);
 
       nextManifest = upsertManifestEntry(nextManifest, {
         ...entry,
+        installPath: skillDir,
         hash: latestHash,
         installedAt: new Date().toISOString()
       });
