@@ -2,7 +2,7 @@ import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
 import { SkillGridClient } from "@/components/skill-grid-client";
 import { AGENTS } from "@/lib/agents";
-import { listAllSkills } from "@/lib/github";
+import { getLeaderboardData, listAllSkills } from "@/lib/github";
 import { SkillRecord } from "@/lib/skill";
 
 export const revalidate = 60;
@@ -16,8 +16,10 @@ async function loadSkillsSafe(): Promise<SkillRecord[]> {
 }
 
 export default async function HomePage() {
-  const skills = await loadSkillsSafe();
-  const uniqueAuthors = new Set(skills.map((s) => s.author).filter(Boolean));
+  const [skills, leaderboard] = await Promise.all([
+    loadSkillsSafe(),
+    getLeaderboardData().catch(() => ({ contributors: [], mergedPulls: [], recentCommits: [] }))
+  ]);
 
   return (
     <div>
@@ -69,7 +71,7 @@ export default async function HomePage() {
               <span className="ml-2 text-text-muted">skills</span>
             </div>
             <div>
-              <span className="text-2xl font-semibold text-text-primary">{uniqueAuthors.size}</span>
+              <span className="text-2xl font-semibold text-text-primary">{leaderboard.contributors.length}</span>
               <span className="ml-2 text-text-muted">contributors</span>
             </div>
             <div>
