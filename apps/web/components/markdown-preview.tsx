@@ -25,7 +25,7 @@ export function MarkdownPreview({ markdown }: MarkdownPreviewProps) {
   }, []);
 
   return (
-    <div data-color-mode={colorMode} className="markdown-viewer rounded-xl border border-border bg-surface">
+    <div data-color-mode={colorMode} className="markdown-viewer min-w-0 rounded-xl border border-border bg-surface">
       <MDEditor.Markdown source={markdown} style={{ backgroundColor: "transparent" }} />
     </div>
   );

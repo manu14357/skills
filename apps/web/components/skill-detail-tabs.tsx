@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { CopyButton } from "./copy-button";
 import { MarkdownPreview } from "./markdown-preview";
@@ -34,6 +34,15 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
   const [selectedSha, setSelectedSha] = useState<string>(history[1]?.sha || "");
   const [historicalRaw, setHistoricalRaw] = useState<string>("");
   const [revertMessage, setRevertMessage] = useState<string>("");
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const read = () => setIsDark(document.documentElement.getAttribute("data-theme") !== "light");
+    read();
+    const obs = new MutationObserver(read);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => obs.disconnect();
+  }, []);
 
   const tabs = useMemo(
     () => [
@@ -78,7 +87,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
   }
 
   return (
-    <section className="space-y-5">
+    <section className="min-w-0 space-y-5">
       {/* Tabs — scrollable on mobile */}
       <div className="flex overflow-x-auto border-b border-border">
         {tabs.map((entry) => (
@@ -110,7 +119,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
               </a>
             </div>
           </div>
-          <pre className="max-h-[60vh] overflow-auto rounded-lg border border-border bg-black/60 p-4 text-xs leading-relaxed text-zinc-300">{skill.raw}</pre>
+          <pre className="max-h-[60vh] overflow-auto rounded-lg border border-border bg-bg p-4 text-xs leading-relaxed text-text-primary">{skill.raw}</pre>
         </div>
       ) : null}
 
@@ -118,7 +127,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
         <div className="space-y-4 rounded-xl border border-border bg-surface p-4">
           <ul className="space-y-2">
             {history.map((entry, index) => (
-              <li key={entry.sha} className="flex items-start gap-3 rounded-lg border border-border bg-black/30 p-3">
+              <li key={entry.sha} className="flex items-start gap-3 rounded-lg border border-border bg-surface p-3">
                 <span className="mt-0.5 shrink-0 rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
                   v{history.length - index}
                 </span>
@@ -135,14 +144,14 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
             ))}
           </ul>
 
-          <div className="rounded-md border border-border bg-black/30 p-3">
+          <div className="rounded-md border border-border bg-surface p-3">
             <p className="mb-2 text-xs text-text-muted">Diff against selected version</p>
             <div className="mb-3 flex flex-wrap items-center gap-2">
               <select
                 aria-label="Select historical version"
                 value={selectedSha}
                 onChange={(event) => setSelectedSha(event.target.value)}
-                className="rounded-md border border-border bg-black/40 px-3 py-2 text-xs text-text-primary"
+                className="rounded-md border border-border bg-bg px-3 py-2 text-xs text-text-primary"
               >
                 <option value="">Select version</option>
                 {history.map((entry) => (
@@ -168,7 +177,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
             </div>
 
             {historicalRaw ? (
-              <DiffViewer oldValue={historicalRaw} newValue={skill.raw} splitView={false} useDarkTheme />
+              <DiffViewer oldValue={historicalRaw} newValue={skill.raw} splitView={false} useDarkTheme={isDark} />
             ) : (
               <p className="text-xs text-text-muted">Select a version to view a diff.</p>
             )}
@@ -198,7 +207,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
           {discussion.length > 0 ? (
             <ul className="space-y-2">
               {discussion.map((entry) => (
-                <li key={entry.number} className="rounded-lg border border-border bg-black/30 p-3">
+                <li key={entry.number} className="rounded-lg border border-border bg-surface p-3">
                   <p className="text-sm text-text-primary">{entry.title}</p>
                   <a href={entry.url} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs text-primary hover:underline">
                     #{entry.number} — Open thread ↗

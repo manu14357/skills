@@ -111,7 +111,7 @@ export function SkillEditorForm({
               onChange={(event) => setName(normalizeSkillName(event.target.value))}
               disabled={mode === "edit"}
               placeholder="my-skill"
-              className="w-full rounded-lg border border-border bg-black/40 px-3 py-2.5 font-mono text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2 disabled:opacity-60"
+              className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 font-mono text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2 disabled:opacity-60"
               required
             />
             {normalized ? (
@@ -129,7 +129,7 @@ export function SkillEditorForm({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder="What this skill does and when it triggers"
-              className="w-full rounded-lg border border-border bg-black/40 px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
+              className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
               required
             />
           </div>
@@ -141,7 +141,7 @@ export function SkillEditorForm({
                 title="Skill category"
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="w-full rounded-lg border border-border bg-black/40 px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
+                className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
               >
                 {CATEGORY_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -159,7 +159,7 @@ export function SkillEditorForm({
                 value={author}
                 onChange={(event) => setAuthor(event.target.value)}
                 placeholder="github-username"
-                className="w-full rounded-lg border border-border bg-black/40 px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
+                className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export function SkillEditorForm({
               value={summary}
               onChange={(event) => setSummary(event.target.value)}
               placeholder={mode === "submit" ? "Brief description of what this skill does" : "What changed in this edit?"}
-              className="w-full rounded-lg border border-border bg-black/40 px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
+              className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-text-primary outline-none ring-primary/40 transition focus:border-primary/60 focus:ring-2"
               required
             />
           </div>
@@ -264,15 +264,15 @@ export function SkillEditorForm({
         <div className="sticky top-20 space-y-4">
           <div className="rounded-xl border border-border bg-surface p-4">
             <p className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-text-muted">Live preview</p>
-            <pre className="max-h-[480px] overflow-auto rounded-lg border border-border bg-black/60 p-3 text-[11px] leading-relaxed text-zinc-300">
+            <pre className="max-h-[480px] overflow-auto rounded-lg border border-border bg-bg p-3 text-[11px] leading-relaxed text-text-primary">
               {generatedMarkdown}
             </pre>
           </div>
 
           <div className="rounded-xl border border-border bg-surface p-4">
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-text-muted">Install command</p>
-            <div className="flex items-center gap-2 rounded-lg border border-border bg-black/60 px-3 py-2.5">
-              <code className="flex-1 truncate font-mono text-[11px] text-zinc-300">
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-bg px-3 py-2.5">
+              <code className="flex-1 truncate font-mono text-[11px] text-text-muted">
                 {`npx zskills add your-org/zskills --skill ${normalized || "skill-name"}`}
               </code>
             </div>

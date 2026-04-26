@@ -50,7 +50,7 @@ export default async function SkillDetailPage({
           skill
         </p>
 
-        <h1 className="font-mono text-3xl font-bold tracking-tight text-text-primary sm:text-4xl md:text-5xl">
+        <h1 className="break-words font-mono text-3xl font-bold tracking-tight text-text-primary sm:text-4xl md:text-5xl">
           {skill.name}
         </h1>
 
@@ -78,7 +78,7 @@ export default async function SkillDetailPage({
       </div>
 
       {/* ── Sticky action bar ── */}
-      <div className="sticky top-14 z-30 -mx-5 border-b border-border bg-bg/90 px-5 py-2.5 backdrop-blur md:-mx-10 md:px-10 lg:-mx-16 lg:px-16">
+      <div className="sticky top-14 z-30 border-b border-border bg-bg/90 py-2.5 backdrop-blur md:-mx-10 md:px-10 lg:-mx-16 lg:px-16">
         <div className="flex flex-wrap items-center gap-2">
           <CopyButton value={installCommand} />
           <a
@@ -94,13 +94,14 @@ export default async function SkillDetailPage({
             className="rounded-md border border-border px-3 py-1.5 text-xs text-text-muted transition-colors hover:border-text-muted hover:text-text-primary"
             download
           >
-            Download SKILL.md
+            <span className="sm:hidden">Download ↓</span>
+            <span className="hidden sm:inline">Download SKILL.md</span>
           </a>
         </div>
       </div>
 
       {/* ── Main grid ── */}
-      <div className="grid gap-8 pt-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid grid-cols-1 gap-8 pt-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         {/* Left: tabs */}
         <div className="min-w-0">
           <SkillDetailTabs skill={skill} history={history} discussion={discussion} rawUrl={rawUrl} />
@@ -111,8 +112,8 @@ export default async function SkillDetailPage({
           {/* Install */}
           <div className="rounded-xl border border-border bg-surface p-4">
             <p className="mb-2 text-[11px] uppercase tracking-widest text-text-muted">Install</p>
-            <div className="flex items-center gap-2 rounded-lg border border-border bg-black/50 px-3 py-2.5">
-              <code className="min-w-0 flex-1 truncate font-mono text-[11px] text-zinc-300">
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-bg px-3 py-2.5">
+              <code className="min-w-0 flex-1 truncate font-mono text-[11px] text-text-muted">
                 {installCommand}
               </code>
               <CopyButton value={installCommand} minimal />

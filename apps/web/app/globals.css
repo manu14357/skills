@@ -67,6 +67,8 @@ code, pre {
 /* ─── Markdown viewer ─── */
 .markdown-viewer {
   padding: 1.5rem;
+  max-width: 100%;
+  min-width: 0;
 }
 @media (min-width: 640px) {
   .markdown-viewer { padding: 2rem; }
@@ -80,6 +82,11 @@ code, pre {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", ui-sans-serif, system-ui !important;
   font-size: 0.9375rem !important;
   line-height: 1.8 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
 }
 
 /* Headings */
@@ -116,6 +123,7 @@ code, pre {
 .markdown-viewer .wmde-markdown p {
   color: rgb(var(--color-text-muted)) !important;
   margin: 0.85em 0 !important;
+  overflow-wrap: anywhere !important;
 }
 .markdown-viewer .wmde-markdown strong {
   color: rgb(var(--color-text-primary)) !important;
@@ -135,6 +143,7 @@ code, pre {
   font-family: "JetBrains Mono", ui-monospace, monospace !important;
   font-weight: 500 !important;
   border: none !important;
+  white-space: break-spaces !important;
 }
 [data-theme="light"] .markdown-viewer .wmde-markdown :not(pre) > code {
   background: rgb(var(--color-primary) / 0.1) !important;
@@ -147,8 +156,16 @@ code, pre {
   border-radius: 10px !important;
   padding: 1.1rem 1.25rem !important;
   overflow-x: auto !important;
+  max-width: 100% !important;
+  word-break: normal !important;
+  white-space: pre !important;
   margin: 1.2em 0 !important;
   position: relative !important;
+}
+.markdown-viewer .wmde-markdown pre::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
 }
 [data-theme="dark"] .markdown-viewer .wmde-markdown pre {
   background: rgb(15 15 15) !important;
@@ -188,6 +205,7 @@ code, pre {
 .markdown-viewer .wmde-markdown li {
   margin: 0.35em 0 !important;
   line-height: 1.7 !important;
+  overflow-wrap: anywhere !important;
 }
 .markdown-viewer .wmde-markdown li > p {
   margin: 0.2em 0 !important;
@@ -223,10 +241,12 @@ code, pre {
 .markdown-viewer .wmde-markdown table {
   border-collapse: collapse !important;
   width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  overflow-x: auto !important;
   margin: 1.25em 0 !important;
   font-size: 0.875rem !important;
   border-radius: 8px !important;
-  overflow: hidden !important;
   border: 1px solid rgb(var(--color-border)) !important;
 }
 .markdown-viewer .wmde-markdown table th {

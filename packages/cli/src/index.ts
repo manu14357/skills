@@ -172,12 +172,22 @@ function hashContent(content: string): string {
 async function installSkill(options: {
   repo: string;
   skill: string;
-  agent: string;
-  useGlobal: boolean;
+  agent?: string;
+  useGlobal?: boolean;
+  customPath?: string;
 }): Promise<ManifestEntry> {
   const normalizedSkill = normalizeSkillName(options.skill);
   const content = await fetchText(buildRawSkillUrl(options.repo, normalizedSkill));
-  const base = targetBasePath(options.agent, options.useGlobal);
+
+  let base: string;
+  if (options.customPath) {
+    base = options.customPath;
+  } else if (options.agent) {
+    base = targetBasePath(options.agent, Boolean(options.useGlobal));
+  } else {
+    base = path.resolve(process.cwd(), "skills");
+  }
+
   const skillDir = path.join(base, normalizedSkill);
   const skillFile = path.join(skillDir, "SKILL.md");
 
@@ -187,7 +197,7 @@ async function installSkill(options: {
   return {
     repo: options.repo,
     skill: normalizedSkill,
-    agent: options.agent,
+    agent: options.agent || "custom",
     installPath: skillFile,
     hash: hashContent(content),
     installedAt: new Date().toISOString()
@@ -204,9 +214,15 @@ function upsertManifestEntry(manifest: Manifest, entry: ManifestEntry): Manifest
   };
 }
 
-async function commandAdd(repo: string, options: { skill?: string; agent?: string[]; all?: boolean; global?: boolean }) {
-  const selectedAgents = selectAgentsFromFlags(options.agent);
+async function commandAdd(repo: string, options: { skill?: string; agent?: string[]; all?: boolean; global?: boolean; path?: string }) {
   const useGlobal = Boolean(options.global);
+  const customPath = options.path ? path.resolve(options.path) : undefined;
+  const hasAgents = options.agent && options.agent.length > 0;
+
+  // If neither --path nor --agent given, default to ./skills in cwd
+  const selectedAgents = (!customPath && hasAgents)
+    ? selectAgentsFromFlags(options.agent)
+    : customPath ? [] : null;
 
   const skillNames = options.skill
     ? [normalizeSkillName(options.skill)]
@@ -220,12 +236,24 @@ async function commandAdd(repo: string, options: { skill?: string; agent?: strin
   let manifest = await loadManifest();
   let installCount = 0;
 
-  for (const skill of skillNames) {
-    for (const agent of selectedAgents) {
-      const entry = await installSkill({ repo, skill, agent, useGlobal });
+  if (customPath || (!hasAgents)) {
+    // Path mode or default ./skills mode
+    const baseDir = customPath ?? path.resolve(process.cwd(), "skills");
+    for (const skill of skillNames) {
+      const entry = await installSkill({ repo, skill, customPath: baseDir });
       manifest = upsertManifestEntry(manifest, entry);
       installCount += 1;
-      console.log(`Installed ${skill} for ${agent} -> ${entry.installPath}`);
+      console.log(`Installed ${skill} -> ${entry.installPath}`);
+    }
+  } else {
+    // Agent mode
+    for (const skill of skillNames) {
+      for (const agent of selectedAgents!) {
+        const entry = await installSkill({ repo, skill, agent, useGlobal });
+        manifest = upsertManifestEntry(manifest, entry);
+        installCount += 1;
+        console.log(`Installed ${skill} for ${agent} -> ${entry.installPath}`);
+      }
     }
   }
 
@@ -408,12 +436,13 @@ program
   .command("add")
   .argument("<repo>", "GitHub repo (owner/name)")
   .option("--skill <name>", "Install one specific skill")
-  .option("-a, --agent <agent>", "Target agent slug", (value, previous: string[]) => {
+  .option("-a, --agent <agent>", "Target agent slug (e.g. claude-code, copilot)", (value, previous: string[]) => {
     previous.push(value);
     return previous;
   }, [])
   .option("--all", "Install all skills from repo")
   .option("--global", "Install into global agent path")
+  .option("--path <dir>", "Custom output directory (overrides agent paths, default: ./skills)")
   .action(async (repo, options) => {
     await commandAdd(repo, options);
   });

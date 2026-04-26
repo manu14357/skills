@@ -29,7 +29,7 @@ export default async function AgentPage({ params }: { params: Promise<{ agentNam
           <p>Project path: {agent.projectPath}</p>
           <p>Global path: {agent.globalPath}</p>
         </div>
-        <pre className="rounded-md border border-border bg-black/40 p-3 text-xs text-zinc-300">
+        <pre className="rounded-md border border-border bg-bg p-3 text-xs text-text-muted">
           {`npx zskills add your-org/zskills -a ${agent.slug}`}
         </pre>
       </header>
