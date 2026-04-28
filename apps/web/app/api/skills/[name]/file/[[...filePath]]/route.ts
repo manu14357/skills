@@ -5,11 +5,11 @@ export const runtime = "nodejs";
 
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ name: string; filePath: string[] }> }
+  { params }: { params: Promise<{ name: string; filePath?: string[] }> }
 ) {
   try {
     const { name, filePath } = await params;
-    const path = filePath.join("/");
+    const path = (filePath || []).join("/");
     const content = await getSkillFileContent(name, path);
 
     return new NextResponse(content, {
