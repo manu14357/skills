@@ -442,3 +442,80 @@ export function withRevalidate<T>(value: T): T {
   void DEFAULT_REVALIDATE_SECONDS;
   return value;
 }
+
+type FileNode = {
+  type: "file" | "dir";
+  name: string;
+  path: string;
+  size?: number;
+  download_url?: string | null;
+};
+
+async function listSkillFolderContents(skillName: string, basePath: string = SKILLS_DIR, subfolderPath: string = ""): Promise<FileNode[]> {
+  const token = readToken();
+  const normalized = normalizeSkillName(skillName);
+  const pathSegments = [basePath, normalized];
+  
+  if (subfolderPath) {
+    pathSegments.push(subfolderPath);
+  }
+  
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${pathSegments.join("/")}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: ghHeaders(token),
+      next: { revalidate: DEFAULT_REVALIDATE_SECONDS }
+    });
+
+    if (!res.ok) return [];
+
+    const data = (await res.json()) as Array<{
+      type: "file" | "dir";
+      name: string;
+      path: string;
+      size?: number;
+      download_url?: string | null;
+    }>;
+
+    return data.map((item) => ({
+      type: item.type,
+      name: item.name,
+      path: item.path,
+      size: item.size,
+      download_url: item.download_url
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getSkillFolderStructure(skillName: string, subfolderPath: string = ""): Promise<FileNode[]> {
+  return listSkillFolderContents(skillName, SKILLS_DIR, subfolderPath);
+}
+
+export async function getSkillFileContent(skillName: string, filePath: string): Promise<string> {
+  const token = readToken();
+  const normalized = normalizeSkillName(skillName);
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${SKILLS_DIR}/${normalized}/${filePath}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: ghHeaders(token),
+      next: { revalidate: DEFAULT_REVALIDATE_SECONDS }
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch file: ${res.status}`);
+    }
+
+    const data = (await res.json()) as GitHubContentFile;
+    if (!data.content) {
+      throw new Error("Missing file content");
+    }
+
+    return decodeContent(data.content);
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : "Failed to fetch file content");
+  }
+}

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { CopyButton } from "./copy-button";
 import { MarkdownPreview } from "./markdown-preview";
+import { FilesBrowser } from "./files-browser";
 import type { SkillRecord } from "@/lib/skill";
 
 type HistoryItem = {
@@ -30,11 +31,12 @@ type SkillDetailTabsProps = {
 };
 
 export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDetailTabsProps) {
-  const [tab, setTab] = useState<"overview" | "raw" | "history" | "discussion">("overview");
+  const [tab, setTab] = useState<"overview" | "raw" | "files" | "history" | "discussion">("overview");
   const [selectedSha, setSelectedSha] = useState<string>(history[1]?.sha || "");
   const [historicalRaw, setHistoricalRaw] = useState<string>("");
   const [revertMessage, setRevertMessage] = useState<string>("");
   const [isDark, setIsDark] = useState(true);
+  const [openPath, setOpenPath] = useState<string | null>(null);
 
   useEffect(() => {
     const read = () => setIsDark(document.documentElement.getAttribute("data-theme") !== "light");
@@ -48,6 +50,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
     () => [
       { key: "overview", label: "Overview" },
       { key: "raw", label: "Raw SKILL.md" },
+      { key: "files", label: "Files" },
       { key: "history", label: "History" },
       { key: "discussion", label: "Discussion" }
     ] as const,
@@ -86,6 +89,11 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
     setRevertMessage(payload.pullRequestUrl ? `Revert PR created: ${payload.pullRequestUrl}` : "Revert PR created.");
   }
 
+  function handleRelativeLink(href: string) {
+    setTab("files");
+    setOpenPath((prev) => (prev === href ? `${href}#${Date.now()}` : href));
+  }
+
   return (
     <section className="min-w-0 space-y-5">
       {/* Tabs — scrollable on mobile */}
@@ -106,7 +114,7 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
         ))}
       </div>
 
-      {tab === "overview" ? <MarkdownPreview markdown={skill.body} /> : null}
+      {tab === "overview" ? <MarkdownPreview markdown={skill.body} onRelativeLinkClick={handleRelativeLink} /> : null}
 
       {tab === "raw" ? (
         <div className="space-y-3 rounded-xl border border-border bg-surface p-4">
@@ -122,6 +130,8 @@ export function SkillDetailTabs({ skill, history, discussion, rawUrl }: SkillDet
           <pre className="max-h-[60vh] overflow-auto rounded-lg border border-border bg-bg p-4 text-xs leading-relaxed text-text-primary">{skill.raw}</pre>
         </div>
       ) : null}
+
+      {tab === "files" ? <FilesBrowser skillSlug={skill.slug} openPath={openPath} /> : null}
 
       {tab === "history" ? (
         <div className="space-y-4 rounded-xl border border-border bg-surface p-4">

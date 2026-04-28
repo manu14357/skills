@@ -1,13 +1,18 @@
 "use client";
 
 import MDEditor from "@uiw/react-md-editor";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 
 type MarkdownPreviewProps = {
   markdown: string;
+  onRelativeLinkClick?: (href: string) => void;
 };
 
-export function MarkdownPreview({ markdown }: MarkdownPreviewProps) {
+function isRelativeHref(href: string) {
+  return !(href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:") || href.startsWith("#") || href.startsWith("/"));
+}
+
+export function MarkdownPreview({ markdown, onRelativeLinkClick }: MarkdownPreviewProps) {
   const [colorMode, setColorMode] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
@@ -24,8 +29,22 @@ export function MarkdownPreview({ markdown }: MarkdownPreviewProps) {
     return () => observer.disconnect();
   }, []);
 
+  function handleClick(event: MouseEvent<HTMLDivElement>) {
+    if (!onRelativeLinkClick) return;
+    const target = event.target as HTMLElement | null;
+    const link = target?.closest("a");
+    const href = link?.getAttribute("href");
+    if (!href || !isRelativeHref(href)) return;
+    event.preventDefault();
+    onRelativeLinkClick(href);
+  }
+
   return (
-    <div data-color-mode={colorMode} className="markdown-viewer min-w-0 rounded-xl border border-border bg-surface">
+    <div
+      data-color-mode={colorMode}
+      className="markdown-viewer min-w-0 rounded-xl border border-border bg-surface"
+      onClick={handleClick}
+    >
       <MDEditor.Markdown source={markdown} style={{ backgroundColor: "transparent" }} />
     </div>
   );
