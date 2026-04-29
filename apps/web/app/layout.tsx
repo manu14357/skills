@@ -1,10 +1,30 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "ZSkills — Open Skill Registry",
-  description: "The open registry for agent skills. Browse, submit, and evolve SKILL.md files for every coding agent."
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "ZSkills — Open Skill Registry",
+    template: "%s · ZSkills"
+  },
+  description: "The open registry for agent skills. Browse, submit, and evolve SKILL.md files for every coding agent.",
+  alternates: {
+    canonical: SITE_URL
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: "ZSkills — Open Skill Registry",
+    description: "The open registry for agent skills. Browse, submit, and evolve SKILL.md files for every coding agent.",
+    siteName: "ZSkills"
+  },
+  twitter: {
+    card: "summary",
+    title: "ZSkills — Open Skill Registry",
+    description: "The open registry for agent skills. Browse, submit, and evolve SKILL.md files for every coding agent."
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

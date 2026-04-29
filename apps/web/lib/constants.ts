@@ -1,9 +1,11 @@
 const ENV_OWNER = process.env.GITHUB_REPO_OWNER?.trim();
 const ENV_REPO = process.env.GITHUB_REPO_NAME?.trim();
+const ENV_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
 export const REPO_OWNER = ENV_OWNER && ENV_OWNER !== "your-org" ? ENV_OWNER : "manu14357";
 export const REPO_NAME = ENV_REPO && ENV_REPO !== "zskills" ? ENV_REPO : "zskills";
 export const REPO_SLUG = `${REPO_OWNER}/${REPO_NAME}`;
+export const SITE_URL = ENV_SITE_URL || "https://zskills.vercel.app";
 
 export const RAW_BASE_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main`;
 export const SKILLS_DIR = "skills";

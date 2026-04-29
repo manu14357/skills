@@ -1,12 +1,53 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AgentBadges } from "@/components/agent-badges";
 import { CopyButton } from "@/components/copy-button";
 import { SkillDetailTabs } from "@/components/skill-detail-tabs";
-import { RAW_BASE_URL } from "@/lib/constants";
+import { RAW_BASE_URL, SITE_URL } from "@/lib/constants";
 import { getSkillByName, getSkillHistory, getSkillRelatedDiscussion, listAllSkills } from "@/lib/github";
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ skillName: string }>;
+}): Promise<Metadata> {
+  const { skillName } = await params;
+
+  try {
+    const skill = await getSkillByName(skillName);
+    const title = `${skill.name} — Skill`;
+    const description = skill.description || "Explore this ZSkills entry.";
+    const url = `${SITE_URL}/s/${skill.slug}`;
+
+    return {
+      title,
+      description,
+      alternates: {
+        canonical: url
+      },
+      openGraph: {
+        type: "article",
+        url,
+        title,
+        description,
+        siteName: "ZSkills"
+      },
+      twitter: {
+        card: "summary",
+        title,
+        description
+      }
+    };
+  } catch {
+    return {
+      title: "Skill not found · ZSkills",
+      description: "This skill could not be found."
+    };
+  }
+}
 
 export default async function SkillDetailPage({
   params,
